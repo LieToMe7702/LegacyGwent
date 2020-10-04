@@ -1,6 +1,8 @@
 ﻿using Alsein.Extensions.LifetimeAnnotations;
+using Assets.Script.ResourceManagement;
 using Autofac;
 using Microsoft.AspNetCore.SignalR.Client;
+using System;
 using System.Linq;
 using System.Net;
 using System.Reflection;
@@ -12,6 +14,7 @@ public class Bootstrapper : MonoBehaviour
     {
         if (DependencyResolver.Container != null)
             return;
+        AssetBundleManager.Instance = new AssetBundleManager(this);
         var IP = Dns.GetHostEntry("cynthia.ovyno.com").AddressList[0];
         var builder = new ContainerBuilder();
         builder.Register(x => DependencyResolver.Container).SingleInstance();

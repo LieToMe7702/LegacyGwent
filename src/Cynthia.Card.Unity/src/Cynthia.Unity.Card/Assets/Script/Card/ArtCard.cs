@@ -1,4 +1,5 @@
-﻿using Cynthia.Card;
+﻿using Assets.Script.ResourceManagement;
+using Cynthia.Card;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -66,7 +67,9 @@ public class ArtCard : MonoBehaviour
         var use = this.GetComponent<CardMoveInfo>();
         if (use != null && !CurrentCore.IsCardBack)
             use.CardUseInfo = CardInfo.CardUseInfo;
-        CardImg.sprite = Resources.Load<Sprite>("Sprites/Cards/" + CurrentCore.CardArtsId);
+        AssetBundleManager.Instance.LoadResource(CurrentCore.CardArtsId, "sprites/card", CurrentCore, OnResourceLoaded, typeof(Sprite));
+
+        //CardImg.sprite = Resources.Load<Sprite>("Sprites/Cards/" + CurrentCore.CardArtsId);
         //设置卡牌是否灰(转移到属性)
         //如果卡牌是背面,设置背面并结束
         CardBack.gameObject.SetActive(false);
@@ -156,6 +159,15 @@ public class ArtCard : MonoBehaviour
             Strength.color = ClientGlobalInfo.RedColor;
         // FactionIcon.GetComponent<RectTransform>().sizeDelta = new Vector2(50, 50 + (iconCount == 0 ? 1 : iconCount) * 50);
         //-----------------------------------------------
+    }
+
+    private void OnResourceLoaded(Object obj, CardStatus status)
+    {
+        var sprite = obj as Sprite;
+        if (CurrentCore.CardArtsId == status.CardArtsId && sprite != null)
+        {
+            CardImg.sprite = sprite;
+        }
     }
 
     //-------------------------------------------------------------------------------------------
